@@ -1,0 +1,31 @@
+<main class="detail-page">
+  <header class="detail-header">
+    <a routerLink="/" class="back-link"><i class="pi pi-arrow-left"></i> Volver al portafolio</a
+    >
+  </header>
+  <section class="detail-hero">
+    <h1>{{ project.title }}</h1>
+    <p>{{ project.description }}</p>
+    <div class="detail-tags">
+      @for (tag of project.tags; track tag) {
+        <app-project-tag [label]="tag" />
+      }
+    </div>
+  </section>
+  <section class="detail-body">
+    <div class="detail-gallery">
+      @for (image of project.images; track image) {
+        <img [src]="'/assets/' + image" [alt]="project.title + ' — imagen del proyecto'" />
+      }
+    </div>
+    <div class="detail-copy">
+      <p>
+        Aquí podremos desarrollar el caso completo: contexto, decisiones de diseño, exploraciones y
+        resultado final.
+      </p>
+      <a routerLink="/contacto" class="solid-button"
+        >Hablemos de tu proyecto <i class="pi pi-arrow-up-right"></i
+      ></a>
+    </div>
+  </section>
+</main>

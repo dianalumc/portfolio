@@ -1,0 +1,81 @@
+<main class="portfolio-shell">
+  <header class="topbar">
+    <a class="wordmark" routerLink="/" aria-label="Diana Lu, inicio"
+      ><img class="brand-logo" src="/assets/MC-Negro.png" alt="Diana Lu" /><span>Diana Lu</span></a
+    >
+    <div class="topbar-meta">
+      <span>Diseño UX/UI / Dirección / Digital</span><span class="availability"></span>
+    </div>
+    <a class="mail-link" routerLink="/contacto">Escríbeme <i class="pi pi-arrow-up-right"></i></a>
+  </header>
+  <section class="hello-banner" aria-label="Presentación">
+    <div class="hello-image">
+      <img src="/assets/Ilustración_1.png" alt="Ilustración de Diana Lu" />
+    </div>
+    <div class="hello-copy">
+      <h2>Hola!</h2>
+      <p>Una colección de identidades, interfaces y objetos visuales construidos con curiosidad y cuidado.</p>
+    </div>
+  </section>
+  <section class="intro-block" id="inicio">
+    <div>
+      <h1>Ideas con forma.<br /><em>Diseño con pausa.</em></h1>
+    </div>
+    <p class="intro-copy">Una colección de identidades, interfaces y objetos visuales construidos con curiosidad y cuidado.</p>
+  </section>
+
+
+  <section class="book-stage" aria-label="Portafolio PDF de Diana Lu">
+    <div class="pdf-book" [class.is-loading]="!pdfPageCount()">
+      <div class="pdf-page pdf-page-left">
+        <canvas #leftCanvas [style.transform]="'scale(' + zoomLevel() + ')'" aria-label="Página izquierda del portafolio"></canvas>
+      </div>
+      <div class="pdf-page pdf-page-right">
+        <canvas #rightCanvas [style.transform]="'scale(' + zoomLevel() + ')'" aria-label="Página derecha del portafolio"></canvas>
+      </div>
+      @if (pdfError()) {
+        <div class="pdf-loading pdf-error">
+          No se pudo abrir el PDF<span>Revisa que exista en public/assets/Portafolio-Web.pdf</span>
+        </div>
+      } @else if (!pdfPageCount()) {
+        <div class="pdf-loading">Abriendo portafolio<span>—</span></div>
+      }
+    </div>
+    <div class="book-controls">
+      <div class="zoom-controls" aria-label="Controles de zoom">
+        <app-button icon="pi pi-minus" variant="zoom-button" [disabled]="zoomLevel() === 1" (pressed)="zoomOut()" />
+        <app-button icon="pi pi-refresh" variant="zoom-button" [disabled]="zoomLevel() === 1" (pressed)="resetZoom()" />
+        <app-button icon="pi pi-plus" variant="zoom-button" [disabled]="zoomLevel() === 1.5" (pressed)="zoomIn()" />
+      </div>
+      <app-button
+        icon="pi pi-arrow-left"
+        variant="nav-button"
+        [disabled]="pageIndex() === 0 || isTurning()"
+        (pressed)="previousSpread()"
+      />
+      <div class="progress-track">
+        <span
+          [style.width.%]="pdfPageCount() ? ((pageIndex() + 2) / pdfPageCount()) * 100 : 0"
+        ></span>
+      </div>
+      <app-button
+        icon="pi pi-arrow-right"
+        variant="nav-button"
+        [disabled]="!pdfPageCount() || pageIndex() + 2 >= pdfPageCount() || isTurning()"
+        (pressed)="nextSpread()"
+      />
+    </div>
+  </section>
+  <app-divider />
+  <section class="projects-section" id="proyectos">
+    <div class="section-heading">
+      <h2>Una muestra de lo que <em>podemos construir.</em></h2>
+    </div>
+    <div class="project-grid">
+      @for (project of projects; track project.slug) {
+        <app-project-card [project]="project" />
+      }
+    </div>
+  </section>
+  <app-footer />
+</main>

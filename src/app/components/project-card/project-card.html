@@ -1,0 +1,13 @@
+<a class="project-card" [routerLink]="['/proyectos', project.slug]">
+  <div class="card-body">
+    <h3>{{ project.title }}</h3>
+    <p>{{ project.description }}</p>
+  </div>
+  <div class="card-bottom">
+    <div class="tag-list">
+      @for (tag of project.tags; track tag) {
+        <app-project-tag [label]="tag" />
+      }
+    </div>
+  </div>
+</a>

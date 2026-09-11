@@ -1,0 +1,22 @@
+:root {
+  --white: #ffffff;
+  --gray-pale: #E8E8E6;
+  --gray-light: #A5A5A5;
+  --gray-dark: #3C3C3A;
+  --violet: #B7A9C9;
+
+  --font-ui: 'Google Sans', sans-serif;
+  --font-display: 'Happy Monkey', cursive;
+
+  --weight-regular: 400;
+  --weight-middle: 500;
+  --weight-bold: 700;
+
+  --size-small: 16px;
+  --size-medium: 32px;
+  --size-large: 64px;
+
+  --space-small: 16px;
+  --space-medium: 32px;
+  --space-large: 64px;
+}

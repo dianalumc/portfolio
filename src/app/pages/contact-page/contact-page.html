@@ -1,0 +1,32 @@
+<main class="contact-page">
+  <header class="detail-header">
+    <a routerLink="/" class="back-link"><i class="pi pi-arrow-left"></i> Volver al portafolio</a
+    >
+  </header>
+  <section class="contact-content">
+    <p class="overline">Contacto</p>
+    <h1>Hablemos de tu proyecto</h1>
+    <p class="contact-lead">
+      ¿Tienes una idea o un producto que necesita diseño y frontend? Cuéntame un poco más.
+    </p>
+    <form (ngSubmit)="submit()">
+      <label for="name">Nombre</label
+      ><input id="name" name="name" placeholder="Tu nombre" required /><label for="email"
+        >Email</label
+      ><input id="email" name="email" type="email" placeholder="tu@email.com" required /><label
+        for="message"
+        >Mensaje</label
+      ><textarea
+        id="message"
+        name="message"
+        placeholder="Cuéntame sobre tu proyecto..."
+        rows="6"
+        required
+      ></textarea
+      ><app-button type="submit" icon="pi pi-send" label="Enviar mensaje"></app-button>
+      @if (sent) {
+        <p class="form-success">Gracias. Te responderé pronto.</p>
+      }
+    </form>
+  </section>
+</main>

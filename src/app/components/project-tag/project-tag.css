@@ -1,0 +1,12 @@
+:host {
+  display: inline-block;
+}
+.project-tag {
+  display: inline-block;
+  padding: var(--space-small);
+  border-radius: 30px;
+  background: var(--gray-pale);
+  color: var(--gray-dark);
+  font-size: var(--size-small);
+  line-height: 1;
+}

@@ -1,0 +1,31 @@
+:host {
+  display: block;
+}
+.dot-divider {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: var(--space-small);
+  overflow: hidden;
+}
+.dot-divider span {
+  width: 10px;
+  height: 10px;
+  flex: 0 0 10px;
+  border-radius: 50%;
+  background: var(--gray-dark);
+  animation: dot-pulse 1.8s ease-in-out infinite;
+  animation-delay: calc(var(--dot-index) * 70ms);
+}
+@keyframes dot-pulse {
+  0%,
+  100% {
+    transform: scale(0);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(0.5);
+    opacity: 1;
+  }
+}

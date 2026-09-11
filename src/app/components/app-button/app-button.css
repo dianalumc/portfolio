@@ -1,0 +1,34 @@
+:host {
+  display: inline-block;
+}
+.solid-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-small);
+  padding: var(--space-small);
+  border: 0;
+  border-radius: 30px;
+  background: var(--gray-light);
+  color: var(--gray-dark);
+  cursor: pointer;
+  font-weight: var(--weight-middle);
+}
+.nav-button,
+.zoom-button {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid var(--gray-dark);
+  border-radius: 50%;
+  background: var(--white);
+  color: var(--gray-dark);
+}
+.nav-button:hover:not(:disabled),
+.zoom-button:hover:not(:disabled) {
+  background: var(--gray-dark);
+  color: var(--white);
+}
+.nav-button:disabled,
+.zoom-button:disabled {
+  opacity: 0.35;
+}

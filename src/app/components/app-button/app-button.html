@@ -1,0 +1,6 @@
+<button pButton [type]="type" [class]="variant" [disabled]="disabled" (click)="pressed.emit()">
+  <i [class]="icon"></i>
+  @if (label) {
+    <span>{{ label }}</span>
+  }
+</button>
