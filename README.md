@@ -34,6 +34,8 @@ To build the project run:
 ng build
 ```
 
+For static hosting, use Node.js 20.19 or newer, run `npm ci` followed by `npm run build`, and publish `dist/diana-lu-portfolio/browser` as the output directory.
+
 This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
 
 ## Running unit tests
