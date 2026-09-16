@@ -12,4 +12,11 @@ export interface ProjectCardData { slug: string; title: string; description: str
 })
 export class ProjectCard {
   @Input({ required: true }) project!: ProjectCardData;
+
+  protected trackPointer(event: PointerEvent) {
+    const card = event.currentTarget as HTMLElement;
+    const bounds = card.getBoundingClientRect();
+    card.style.setProperty('--pointer-x', `${event.clientX - bounds.left}px`);
+    card.style.setProperty('--pointer-y', `${event.clientY - bounds.top}px`);
+  }
 }

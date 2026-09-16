@@ -62,10 +62,10 @@ export class HomePage implements AfterViewInit {
     if (this.isTurning() || index === this.pageIndex() || !this.pdfPageCount()) return;
     this.isTurning.set(true);
     document.querySelector('.pdf-book')?.classList.add(`is-turning-${direction}`);
-    await new Promise((resolve) => setTimeout(resolve, 720));
+    await new Promise((resolve) => setTimeout(resolve, 320));
     this.pageIndex.set(index);
     await this.renderSpread(this.pdfDocument!, index);
-    await new Promise((resolve) => setTimeout(resolve, 720));
+    await new Promise((resolve) => setTimeout(resolve, 320));
     document.querySelector('.pdf-book')?.classList.remove(`is-turning-${direction}`);
     this.isTurning.set(false);
   }
@@ -89,7 +89,7 @@ export class HomePage implements AfterViewInit {
     }
     const page = await pdf.getPage(pageNumber);
     const viewport = page.getViewport({
-      scale: Math.min(2.2, 850 / page.getViewport({ scale: 1 }).width),
+      scale: Math.min(2.5, 1200 / page.getViewport({ scale: 1 }).width),
     });
     canvas.width = viewport.width;
     canvas.height = viewport.height;

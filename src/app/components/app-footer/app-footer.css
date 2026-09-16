@@ -30,6 +30,7 @@
 .footer-contact a:hover {
   opacity: 0.7;
 }
+.footer-contact a { color: var(--white); text-decoration: none; }
 .footer .brand-logo {
   filter: invert(1);
   width: 28px;
