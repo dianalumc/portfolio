@@ -35,7 +35,7 @@
       </div>
       @if (pdfError()) {
         <div class="pdf-loading pdf-error">
-          No se pudo abrir el PDF<span>Revisa que exista en public/assets/Portafolio-Web.pdf</span>
+          No se pudo abrir el PDF<span>{{ pdfErrorMessage() }}</span>
         </div>
       } @else if (!pdfPageCount()) {
         <div class="pdf-loading">Abriendo portafolio<span>—</span></div>

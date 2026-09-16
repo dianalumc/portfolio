@@ -8,11 +8,6 @@ import { AppButton } from '../../components/app-button/app-button';
 import { AppFooter } from '../../components/app-footer/app-footer';
 import { projects } from '../../data/projects';
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
-  'pdfjs-dist/build/pdf.worker.min.mjs',
-  import.meta.url,
-).toString();
-
 @Component({
   imports: [CommonModule, RouterLink, ProjectCard, AppDivider, AppButton, AppFooter],
   selector: 'app-home-page',
@@ -26,6 +21,7 @@ export class HomePage implements AfterViewInit {
   protected readonly pageIndex = signal(0);
   protected readonly pdfPageCount = signal(0);
   protected readonly pdfError = signal(false);
+  protected readonly pdfErrorMessage = signal('');
   protected readonly isTurning = signal(false);
   protected readonly zoomLevel = signal(1);
   protected readonly projects = projects;
@@ -51,11 +47,14 @@ export class HomePage implements AfterViewInit {
 
   private async loadPdf() {
     try {
-      this.pdfDocument = await pdfjsLib.getDocument({ url: '/assets/Portafolio-Web.pdf' }).promise;
+      pdfjsLib.GlobalWorkerOptions.workerSrc = new URL('assets/pdf.worker.min.mjs', document.baseURI).toString();
+      const pdfUrl = new URL('assets/Portafolio-Web.pdf', document.baseURI).toString();
+      this.pdfDocument = await pdfjsLib.getDocument({ url: pdfUrl }).promise;
       this.pdfPageCount.set(this.pdfDocument.numPages);
       await this.renderSpread(this.pdfDocument, 0);
-    } catch {
+    } catch (error) {
       this.pdfError.set(true);
+      this.pdfErrorMessage.set(error instanceof Error ? error.message : 'Error desconocido al cargar el PDF.');
     }
   }
 
