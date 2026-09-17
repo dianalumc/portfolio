@@ -11,7 +11,7 @@
   max-width: 1440px;
   min-height: 100dvh;
   margin: auto;
-  padding: var(--space-small) var(--space-medium);
+  padding: var(--space-small) var(--space-medium) 0 ;
   overflow: visible;
 }
 .topbar {
@@ -77,6 +77,8 @@
   font-family: var(--font-display);
   font-size: var(--size-large);
   font-weight: var(--weight-regular);
+  color: var(--violet);
+  animation: hello-type 900ms cubic-bezier(.2, .8, .2, 1) both;
 }
 .hello-copy p {
   max-width: 420px;
@@ -129,11 +131,14 @@
 .book-controls {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: var(--space-small);
-  width: 170px;
-  margin: var(--space-small) 0 0 auto;
+  width: 100%;
+  margin: var(--space-small) auto 0;
+  position: relative;
 }
-.zoom-controls { display: flex; gap: var(--space-small); margin-right: auto; }
+.zoom-controls { display: flex; gap: var(--space-small); }
+.zoom-status { position: absolute; right: 0; display: inline-flex; align-items: center; gap: 8px; color: var(--violet); font-size: 14px; font-weight: var(--weight-middle); }.zoom-status button { padding: 0; border: 0; background: transparent; color: inherit; cursor: pointer; text-decoration: underline; }
 .progress-track {
   width: 80px;
   height: 1px;
@@ -166,6 +171,8 @@ app-divider {
   font-weight: var(--weight-regular);
   line-height: 1.1;
 }
+.portfolio-tabs { display: flex; gap: 4px; padding: 4px; border-radius: 30px; background: var(--gray-dark); }.portfolio-tabs button { display: inline-flex; align-items: center; gap: 8px; padding: 12px 16px; border: 0; border-radius: 24px; background: transparent; color: var(--white); cursor: pointer; font: inherit; font-size: 14px; }.portfolio-tabs button.active { background: var(--violet); color: var(--white); animation: tab-bounce 460ms cubic-bezier(.2, 1.5, .4, 1) both; }.portfolio-tabs button:hover:not(.active) { background: rgb(255 255 255 / .14); }
+.graphic-portfolio-placeholder { display: grid; min-height: 420px; place-content: center; gap: var(--space-small); padding: var(--space-large); background: var(--gray-pale); text-align: center; }.graphic-portfolio-placeholder h3, .graphic-portfolio-placeholder p { max-width: 520px; margin: 0 auto; }.graphic-portfolio-placeholder h3 { font-family: var(--font-display); font-size: var(--size-medium); font-weight: var(--weight-regular); }
 .section-heading em {
   font-style: normal;
   color: var(--gray-light);
@@ -189,6 +196,8 @@ app-divider {
     transform: rotateY(0);
   }
 }
+@keyframes tab-bounce { 0% { transform: scale(.86); } 65% { transform: scale(1.08); } 100% { transform: scale(1); } }
+@keyframes hello-type { from { opacity: 0; transform: translateY(12px); letter-spacing: .18em; } to { opacity: 1; transform: translateY(0); letter-spacing: 0; } }
 @keyframes page-turn-backward {
   0% {
     opacity: 1;
@@ -254,4 +263,5 @@ app-divider {
   .project-grid {
     grid-template-columns: 1fr;
   }
+  .portfolio-tabs { width: 100%; }.portfolio-tabs button { flex: 1; justify-content: center; padding: 12px 8px; font-size: 13px; }.zoom-status { position: static; width: 100%; justify-content: center; order: 3; }.book-controls { flex-wrap: wrap; }
 }

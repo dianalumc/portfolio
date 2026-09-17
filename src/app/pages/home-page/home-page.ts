@@ -24,6 +24,7 @@ export class HomePage implements AfterViewInit {
   protected readonly pdfErrorMessage = signal('');
   protected readonly isTurning = signal(false);
   protected readonly zoomLevel = signal(1);
+  protected readonly activePortfolio = signal<'web' | 'graphic'>('web');
   protected readonly projects = projects;
 
   ngAfterViewInit() {
@@ -44,6 +45,8 @@ export class HomePage implements AfterViewInit {
   protected zoomIn() { this.zoomLevel.update((zoom) => Math.min(1.5, Number((zoom + 0.1).toFixed(1)))); }
   protected zoomOut() { this.zoomLevel.update((zoom) => Math.max(1, Number((zoom - 0.1).toFixed(1)))); }
   protected resetZoom() { this.zoomLevel.set(1); }
+  protected selectPortfolio(portfolio: 'web' | 'graphic') { this.activePortfolio.set(portfolio); }
+  protected get zoomIsActive() { return this.zoomLevel() > 1; }
 
   private async loadPdf() {
     try {

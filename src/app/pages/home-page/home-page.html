@@ -13,19 +13,20 @@
       <img src="/assets/Ilustración_1.png" alt="Ilustración de Diana Lu" />
     </div>
     <div class="hello-copy">
-      <h2>Hola!</h2>
-      <p>Una colección de identidades, interfaces y objetos visuales construidos con curiosidad y cuidado.</p>
+      <h2>Diseñadora UX/UI & Front-end</h2>
+      <p>Me encantan mis dos profesiones y me hacen muy feliz! PUNTO! No importa nada más!</p>
     </div>
   </section>
-  <section class="intro-block" id="inicio">
-    <div>
-      <h1>Ideas con forma.<br /><em>Diseño con pausa.</em></h1>
-    </div>
-    <p class="intro-copy">Una colección de identidades, interfaces y objetos visuales construidos con curiosidad y cuidado.</p>
-  </section>
-
-
+  <app-divider />
   <section class="book-stage" aria-label="Portafolio PDF de Diana Lu">
+    <div class="section-heading">
+      <h2>Mis portafolios</h2>
+      <div class="portfolio-tabs" role="tablist" aria-label="Mis portafolios">
+        <button type="button" role="tab" [class.active]="activePortfolio() === 'web'" [attr.aria-selected]="activePortfolio() === 'web'" (click)="selectPortfolio('web')"><i class="pi pi-desktop"></i> Portafolio web</button>
+        <button type="button" role="tab" [class.active]="activePortfolio() === 'graphic'" [attr.aria-selected]="activePortfolio() === 'graphic'" (click)="selectPortfolio('graphic')"><i class="pi pi-palette"></i> Diseño gráfico</button>
+      </div>
+    </div>
+    @if (activePortfolio() === 'web') {
     <div class="pdf-book" [class.is-loading]="!pdfPageCount()">
       <div class="pdf-page pdf-page-left">
         <canvas #leftCanvas [style.transform]="'scale(' + zoomLevel() + ')'" aria-label="Página izquierda del portafolio"></canvas>
@@ -47,6 +48,7 @@
         <app-button icon="pi pi-refresh" variant="zoom-button" [disabled]="zoomLevel() === 1" (pressed)="resetZoom()" />
         <app-button icon="pi pi-plus" variant="zoom-button" [disabled]="zoomLevel() === 1.5" (pressed)="zoomIn()" />
       </div>
+      @if (zoomIsActive) { <span class="zoom-status">Zoom {{ zoomLevel() * 100 | number: '1.0-0' }}% activo <button type="button" (click)="resetZoom()">Restablecer</button></span> }
       <app-button
         icon="pi pi-arrow-left"
         variant="nav-button"
@@ -65,6 +67,9 @@
         (pressed)="nextSpread()"
       />
     </div>
+    } @else {
+      <div class="graphic-portfolio-placeholder"><h3>Mi portafolio en diseño gráfico</h3><p>Próximamente podrás explorar aquí una selección de piezas gráficas, dirección de arte y proyectos editoriales.</p></div>
+    }
   </section>
   <app-divider />
   <section class="projects-section" id="proyectos">
