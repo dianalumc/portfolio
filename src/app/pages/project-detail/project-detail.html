@@ -1,15 +1,11 @@
 <main class="detail-page">
   <header class="detail-header">
-    <a routerLink="/" class="back-link"><i class="pi pi-arrow-left"></i> Volver al portafolio</a
-    >
+    <app-button class="back-link" label="Volver al portafolio" icon="pi pi-arrow-left" routerLink="/" />
   </header>
   <section class="detail-hero">
-    <h1>{{ project.title }}</h1>
-    <p>{{ project.description }}</p>
-    <div class="detail-tags">
-      @for (tag of project.tags; track tag) {
-        <app-project-tag [label]="tag" />
-      }
+    <div class="detail-title-row">
+      <div><h1>{{ project.title }}</h1><p>{{ project.description }}</p></div>
+      <div class="detail-tags">@for (tag of project.tags; track tag) { <app-project-tag [label]="tag" /> }</div>
     </div>
   </section>
   <section class="detail-body">
@@ -23,9 +19,8 @@
         Aquí podremos desarrollar el caso completo: contexto, decisiones de diseño, exploraciones y
         resultado final.
       </p>
-      <a routerLink="/contacto" class="solid-button"
-        >Hablemos de tu proyecto <i class="pi pi-arrow-up-right"></i
-      ></a>
+      <app-button label="Hablemos de tu proyecto" icon="pi pi-arrow-up-right" routerLink="/contacto" />
     </div>
   </section>
+  <app-footer />
 </main>

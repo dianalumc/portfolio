@@ -1,6 +1,15 @@
-<button pButton [type]="type" [class]="variant" [disabled]="disabled" (click)="pressed.emit()">
-  <i [class]="icon"></i>
-  @if (label) {
-    <span>{{ label }}</span>
-  }
-</button>
+@if (routerLink !== null) {
+  <a [routerLink]="routerLink" [class]="variant" (click)="pressed.emit()">
+    <i [class]="icon"></i>
+    @if (label) {
+      <span>{{ label }}</span>
+    }
+  </a>
+} @else {
+  <button pButton [type]="type" [class]="variant" [disabled]="disabled" (click)="pressed.emit()">
+    <i [class]="icon"></i>
+    @if (label) {
+      <span>{{ label }}</span>
+    }
+  </button>
+}

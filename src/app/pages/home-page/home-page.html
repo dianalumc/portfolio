@@ -1,74 +1,121 @@
 <main class="portfolio-shell">
   <header class="topbar">
     <a class="wordmark" routerLink="/" aria-label="Diana Lu, inicio"
-      ><img class="brand-logo" src="/assets/MC-Negro.png" alt="Diana Lu" /><span>Diana Lu</span></a
+      ><img class="brand-logo" src="/assets/corazon.png" alt="Diana Lu" /><span>Diana Lu</span></a
     >
-    <div class="topbar-meta">
-      <span>Diseño UX/UI / Dirección / Digital</span><span class="availability"></span>
-    </div>
-    <a class="mail-link" routerLink="/contacto">Escríbeme <i class="pi pi-arrow-up-right"></i></a>
+    <app-button label="Escríbeme" icon="pi pi-arrow-up-right" routerLink="/contacto" />
   </header>
   <section class="hello-banner" aria-label="Presentación">
     <div class="hello-image">
       <img src="/assets/Ilustración_1.png" alt="Ilustración de Diana Lu" />
     </div>
     <div class="hello-copy">
-      <h2>Diseñadora UX/UI & Front-end</h2>
-      <p>Me encantan mis dos profesiones y me hacen muy feliz! PUNTO! No importa nada más!</p>
+      <h3>Diseño UX/UI &<br />Front-end</h3>
+      <p>Me encantan mis dos profesiones y<br />me hacen muy feliz!<br />PUNTO! No importa nada más!</p>
     </div>
   </section>
-  <app-divider />
   <section class="book-stage" aria-label="Portafolio PDF de Diana Lu">
     <div class="section-heading">
       <h2>Mis portafolios</h2>
-      <div class="portfolio-tabs" role="tablist" aria-label="Mis portafolios">
-        <button type="button" role="tab" [class.active]="activePortfolio() === 'web'" [attr.aria-selected]="activePortfolio() === 'web'" (click)="selectPortfolio('web')"><i class="pi pi-desktop"></i> Portafolio web</button>
-        <button type="button" role="tab" [class.active]="activePortfolio() === 'graphic'" [attr.aria-selected]="activePortfolio() === 'graphic'" (click)="selectPortfolio('graphic')"><i class="pi pi-palette"></i> Diseño gráfico</button>
+      <div class="tab-raise">
+        <span class="tab-raise__corner tab-raise__corner--left"></span>
+        <div class="portfolio-tabs" role="tablist" aria-label="Mis portafolios">
+          <button type="button" role="tab"
+              [class.active]="activePortfolio() === 'web'"
+              [attr.aria-selected]="activePortfolio() === 'web'"
+              (click)="selectPortfolio('web')">
+              <i class="pi pi-desktop"></i>
+              <span>Web</span>
+          </button>
+          <button type="button" role="tab"
+              [class.active]="activePortfolio() === 'graphic'"
+              [attr.aria-selected]="activePortfolio() === 'graphic'"
+              (click)="selectPortfolio('graphic')">
+              <i class="pi pi-palette"></i>
+              <span>Diseño gráfico</span>
+          </button>
+        </div>
+        <span class="tab-raise__corner tab-raise__corner--right"></span>
       </div>
     </div>
     @if (activePortfolio() === 'web') {
-    <div class="pdf-book" [class.is-loading]="!pdfPageCount()">
+    <div class="pdf-book" [class.is-loading]="!webPageCount()">
       <div class="pdf-page pdf-page-left">
-        <canvas #leftCanvas [style.transform]="'scale(' + zoomLevel() + ')'" aria-label="Página izquierda del portafolio"></canvas>
+        <canvas #leftCanvas [style.transform]="'scale(' + webZoom() + ')'" aria-label="Página izquierda del portafolio"></canvas>
       </div>
       <div class="pdf-page pdf-page-right">
-        <canvas #rightCanvas [style.transform]="'scale(' + zoomLevel() + ')'" aria-label="Página derecha del portafolio"></canvas>
+        <canvas #rightCanvas [style.transform]="'scale(' + webZoom() + ')'" aria-label="Página derecha del portafolio"></canvas>
       </div>
-      @if (pdfError()) {
+      @if (webError()) {
         <div class="pdf-loading pdf-error">
-          No se pudo abrir el PDF<span>{{ pdfErrorMessage() }}</span>
+          No se pudo abrir el PDF<span>{{ webErrorMessage() }}</span>
         </div>
-      } @else if (!pdfPageCount()) {
+      } @else if (!webPageCount()) {
         <div class="pdf-loading">Abriendo portafolio<span>—</span></div>
       }
     </div>
     <div class="book-controls">
       <div class="zoom-controls" aria-label="Controles de zoom">
-        <app-button icon="pi pi-minus" variant="zoom-button" [disabled]="zoomLevel() === 1" (pressed)="zoomOut()" />
-        <app-button icon="pi pi-refresh" variant="zoom-button" [disabled]="zoomLevel() === 1" (pressed)="resetZoom()" />
-        <app-button icon="pi pi-plus" variant="zoom-button" [disabled]="zoomLevel() === 1.5" (pressed)="zoomIn()" />
+        <app-button icon="pi pi-minus" variant="zoom-button" [disabled]="webZoom() === 1" (pressed)="webZoomOut()" />
+        <app-button icon="pi pi-refresh" variant="zoom-button" [disabled]="webZoom() === 1" (pressed)="webResetZoom()" />
+        <app-button icon="pi pi-plus" variant="zoom-button" [disabled]="webZoom() === 1.5" (pressed)="webZoomIn()" />
       </div>
-      @if (zoomIsActive) { <span class="zoom-status">Zoom {{ zoomLevel() * 100 | number: '1.0-0' }}% activo <button type="button" (click)="resetZoom()">Restablecer</button></span> }
+      @if (webZoomIsActive) { <span class="zoom-status">Zoom {{ webZoom() * 100 | number: '1.0-0' }}% activo <button type="button" (click)="webResetZoom()">Restablecer</button></span> }
       <app-button
         icon="pi pi-arrow-left"
         variant="nav-button"
-        [disabled]="pageIndex() === 0 || isTurning()"
-        (pressed)="previousSpread()"
+        [disabled]="webPageIndex() === 0 || webIsTurning()"
+        (pressed)="webPreviousSpread()"
       />
       <div class="progress-track">
-        <span
-          [style.width.%]="pdfPageCount() ? ((pageIndex() + 2) / pdfPageCount()) * 100 : 0"
-        ></span>
+        <span [style.width.%]="webPageCount() ? ((webPageIndex() + 2) / webPageCount()) * 100 : 0"></span>
       </div>
       <app-button
         icon="pi pi-arrow-right"
         variant="nav-button"
-        [disabled]="!pdfPageCount() || pageIndex() + 2 >= pdfPageCount() || isTurning()"
-        (pressed)="nextSpread()"
+        [disabled]="!webPageCount() || webPageIndex() + 2 >= webPageCount() || webIsTurning()"
+        (pressed)="webNextSpread()"
       />
     </div>
-    } @else {
-      <div class="graphic-portfolio-placeholder"><h3>Mi portafolio en diseño gráfico</h3><p>Próximamente podrás explorar aquí una selección de piezas gráficas, dirección de arte y proyectos editoriales.</p></div>
+    } @else if (activePortfolio() === 'graphic') {
+    <div class="pdf-book" [class.is-loading]="!graphicPageCount()">
+      <div class="pdf-page pdf-page-left">
+        <canvas #leftCanvasG [style.transform]="'scale(' + graphicZoom() + ')'" aria-label="Página izquierda del portafolio de diseño gráfico"></canvas>
+      </div>
+      <div class="pdf-page pdf-page-right">
+        <canvas #rightCanvasG [style.transform]="'scale(' + graphicZoom() + ')'" aria-label="Página derecha del portafolio de diseño gráfico"></canvas>
+      </div>
+      @if (graphicError()) {
+        <div class="pdf-loading pdf-error">
+          No se pudo abrir el PDF<span>{{ graphicErrorMessage() }}</span>
+        </div>
+      } @else if (!graphicPageCount()) {
+        <div class="pdf-loading">Abriendo portafolio<span>—</span></div>
+      }
+    </div>
+    <div class="book-controls">
+      <div class="zoom-controls" aria-label="Controles de zoom">
+        <app-button icon="pi pi-minus" variant="zoom-button" [disabled]="graphicZoom() === 1" (pressed)="graphicZoomOut()" />
+        <app-button icon="pi pi-refresh" variant="zoom-button" [disabled]="graphicZoom() === 1" (pressed)="graphicResetZoom()" />
+        <app-button icon="pi pi-plus" variant="zoom-button" [disabled]="graphicZoom() === 1.5" (pressed)="graphicZoomIn()" />
+      </div>
+      @if (graphicZoomIsActive) { <span class="zoom-status">Zoom {{ graphicZoom() * 100 | number: '1.0-0' }}% activo <button type="button" (click)="graphicResetZoom()">Restablecer</button></span> }
+      <app-button
+        icon="pi pi-arrow-left"
+        variant="nav-button"
+        [disabled]="graphicPageIndex() === 0 || graphicIsTurning()"
+        (pressed)="graphicPreviousSpread()"
+      />
+      <div class="progress-track">
+        <span [style.width.%]="graphicPageCount() ? ((graphicPageIndex() + 2) / graphicPageCount()) * 100 : 0"></span>
+      </div>
+      <app-button
+        icon="pi pi-arrow-right"
+        variant="nav-button"
+        [disabled]="!graphicPageCount() || graphicPageIndex() + 2 >= graphicPageCount() || graphicIsTurning()"
+        (pressed)="graphicNextSpread()"
+      />
+    </div>
     }
   </section>
   <app-divider />

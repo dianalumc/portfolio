@@ -22,7 +22,7 @@ export const projects: Project[] = [
   {
     slug: 'muxsalu',
     title: 'MuxsaLu',
-    type: 'Identidad / Dirección de arte / Editorial',
+    type: 'Identidad / Dirección de arte / Branding / Editorial',
     description:
       'Sistema de identidad para una marca que trabaja con lo esencial y convierte cada detalle en lenguaje.',
     year: '2025',
@@ -32,11 +32,11 @@ export const projects: Project[] = [
   {
     slug: 'plastimet',
     title: 'Plastimet',
-    type: 'Web design / UI / Estrategia',
+    type: 'Web design / UX-UI / Prototipado / Cotizador',
     description:
-      'Experiencia digital y narrativa visual para entrar, explorar y quedarse un poco más.',
+      'Plataforma digital informativa con cotizador para facilitar la toma de decisiones. El diseño respeta fielmente el branding de la marca, con un gran enfoque en la experiencia de usuario pensada para invitar al usuario a entrar, explorar, quedarse un poco más. Todo bajo un enfoque responsive.',
     year: '2024',
-    tags: ['Web design', 'UI', 'Estrategia'],
+    tags: ['Web design', 'UX-UI', 'Prototipado', 'Cotizador'],
     images: ['Plastimet_1.png'],
   },
 ];

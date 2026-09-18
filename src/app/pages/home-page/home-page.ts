@@ -15,87 +15,127 @@ import { projects } from '../../data/projects';
   templateUrl: './home-page.html',
 })
 export class HomePage implements AfterViewInit {
-  @ViewChild('leftCanvas') private leftCanvas?: ElementRef<HTMLCanvasElement>;
+  // ── Portafolio Web ──────────────────────────────────────────────────────────
+  @ViewChild('leftCanvas')  private leftCanvas?: ElementRef<HTMLCanvasElement>;
   @ViewChild('rightCanvas') private rightCanvas?: ElementRef<HTMLCanvasElement>;
-  private pdfDocument?: pdfjsLib.PDFDocumentProxy;
-  protected readonly pageIndex = signal(0);
-  protected readonly pdfPageCount = signal(0);
-  protected readonly pdfError = signal(false);
-  protected readonly pdfErrorMessage = signal('');
-  protected readonly isTurning = signal(false);
-  protected readonly zoomLevel = signal(1);
+  private webPdf?: pdfjsLib.PDFDocumentProxy;
+  protected readonly webPageIndex    = signal(0);
+  protected readonly webPageCount    = signal(0);
+  protected readonly webError        = signal(false);
+  protected readonly webErrorMessage = signal('');
+  protected readonly webIsTurning    = signal(false);
+  protected readonly webZoom         = signal(1);
+
+  // ── Portafolio Diseño Gráfico ───────────────────────────────────────────────
+  @ViewChild('leftCanvasG')  private leftCanvasG?: ElementRef<HTMLCanvasElement>;
+  @ViewChild('rightCanvasG') private rightCanvasG?: ElementRef<HTMLCanvasElement>;
+  private graphicPdf?: pdfjsLib.PDFDocumentProxy;
+  protected readonly graphicPageIndex    = signal(0);
+  protected readonly graphicPageCount    = signal(0);
+  protected readonly graphicError        = signal(false);
+  protected readonly graphicErrorMessage = signal('');
+  protected readonly graphicIsTurning    = signal(false);
+  protected readonly graphicZoom         = signal(1);
+  private graphicLoaded = false;
+
+  // ── Shared ──────────────────────────────────────────────────────────────────
   protected readonly activePortfolio = signal<'web' | 'graphic'>('web');
   protected readonly projects = projects;
 
   ngAfterViewInit() {
-    void this.loadPdf();
+    pdfjsLib.GlobalWorkerOptions.workerSrc = new URL('assets/pdf.worker.min.mjs', document.baseURI).toString();
+    void this.loadWebPdf();
   }
-  protected get totalSpreads() {
-    return Math.ceil((this.pdfPageCount() + 1) / 2);
-  }
-  protected get currentSpread() {
-    return Math.floor(this.pageIndex() / 2) + 1;
-  }
-  protected async previousSpread() {
-    await this.turnTo(Math.max(0, this.pageIndex() - 2), 'backward');
-  }
-  protected async nextSpread() {
-    await this.turnTo(Math.min(this.pdfPageCount() - 1, this.pageIndex() + 2), 'forward');
-  }
-  protected zoomIn() { this.zoomLevel.update((zoom) => Math.min(1.5, Number((zoom + 0.1).toFixed(1)))); }
-  protected zoomOut() { this.zoomLevel.update((zoom) => Math.max(1, Number((zoom - 0.1).toFixed(1)))); }
-  protected resetZoom() { this.zoomLevel.set(1); }
-  protected selectPortfolio(portfolio: 'web' | 'graphic') { this.activePortfolio.set(portfolio); }
-  protected get zoomIsActive() { return this.zoomLevel() > 1; }
 
-  private async loadPdf() {
-    try {
-      pdfjsLib.GlobalWorkerOptions.workerSrc = new URL('assets/pdf.worker.min.mjs', document.baseURI).toString();
-      const pdfUrl = new URL('assets/Portafolio-Web.pdf', document.baseURI).toString();
-      this.pdfDocument = await pdfjsLib.getDocument({ url: pdfUrl }).promise;
-      this.pdfPageCount.set(this.pdfDocument.numPages);
-      await this.renderSpread(this.pdfDocument, 0);
-    } catch (error) {
-      this.pdfError.set(true);
-      this.pdfErrorMessage.set(error instanceof Error ? error.message : 'Error desconocido al cargar el PDF.');
+  // ── Selección de tab ────────────────────────────────────────────────────────
+  protected async selectPortfolio(portfolio: 'web' | 'graphic') {
+    this.activePortfolio.set(portfolio);
+    if (portfolio === 'graphic' && !this.graphicLoaded) {
+      this.graphicLoaded = true;
+      await new Promise((r) => setTimeout(r, 0));
+      void this.loadGraphicPdf();
     }
   }
 
-  private async turnTo(index: number, direction: 'forward' | 'backward') {
-    if (this.isTurning() || index === this.pageIndex() || !this.pdfPageCount()) return;
-    this.isTurning.set(true);
-    document.querySelector('.pdf-book')?.classList.add(`is-turning-${direction}`);
-    await new Promise((resolve) => setTimeout(resolve, 320));
-    this.pageIndex.set(index);
-    await this.renderSpread(this.pdfDocument!, index);
-    await new Promise((resolve) => setTimeout(resolve, 320));
-    document.querySelector('.pdf-book')?.classList.remove(`is-turning-${direction}`);
-    this.isTurning.set(false);
+  // ── Web: navegación y zoom ──────────────────────────────────────────────────
+  protected async webPreviousSpread() { await this.turnTo('web', Math.max(0, this.webPageIndex() - 2), 'backward'); }
+  protected async webNextSpread()     { await this.turnTo('web', Math.min(this.webPageCount() - 1, this.webPageIndex() + 2), 'forward'); }
+  protected webZoomIn()    { this.webZoom.update((z) => Math.min(1.5, Number((z + 0.1).toFixed(1)))); }
+  protected webZoomOut()   { this.webZoom.update((z) => Math.max(1,   Number((z - 0.1).toFixed(1)))); }
+  protected webResetZoom() { this.webZoom.set(1); }
+  protected get webZoomIsActive() { return this.webZoom() > 1; }
+
+  // ── Gráfico: navegación y zoom ──────────────────────────────────────────────
+  protected async graphicPreviousSpread() { await this.turnTo('graphic', Math.max(0, this.graphicPageIndex() - 2), 'backward'); }
+  protected async graphicNextSpread()     { await this.turnTo('graphic', Math.min(this.graphicPageCount() - 1, this.graphicPageIndex() + 2), 'forward'); }
+  protected graphicZoomIn()    { this.graphicZoom.update((z) => Math.min(1.5, Number((z + 0.1).toFixed(1)))); }
+  protected graphicZoomOut()   { this.graphicZoom.update((z) => Math.max(1,   Number((z - 0.1).toFixed(1)))); }
+  protected graphicResetZoom() { this.graphicZoom.set(1); }
+  protected get graphicZoomIsActive() { return this.graphicZoom() > 1; }
+
+  // ── Carga ───────────────────────────────────────────────────────────────────
+  private async loadWebPdf() {
+    try {
+      const url = new URL('assets/Portafolio-Web.pdf', document.baseURI).toString();
+      this.webPdf = await pdfjsLib.getDocument({ url }).promise;
+      this.webPageCount.set(this.webPdf.numPages);
+      await this.renderSpread('web', 0);
+    } catch (e) {
+      this.webError.set(true);
+      this.webErrorMessage.set(e instanceof Error ? e.message : 'Error desconocido.');
+    }
   }
 
-  private async renderSpread(pdf: pdfjsLib.PDFDocumentProxy, startPage: number) {
+  private async loadGraphicPdf() {
+    try {
+      const url = new URL('assets/Portafolio-Dise%C3%B1oGrafico.pdf', document.baseURI).toString();
+      this.graphicPdf = await pdfjsLib.getDocument({ url }).promise;
+      this.graphicPageCount.set(this.graphicPdf.numPages);
+      await this.renderSpread('graphic', 0);
+    } catch (e) {
+      this.graphicError.set(true);
+      this.graphicErrorMessage.set(e instanceof Error ? e.message : 'Error desconocido.');
+    }
+  }
+
+  // ── Motor ────────────────────────────────────────────────────────────────────
+  private async turnTo(tab: 'web' | 'graphic', index: number, direction: 'forward' | 'backward') {
+    const isTurning = tab === 'web' ? this.webIsTurning : this.graphicIsTurning;
+    const pageIndex = tab === 'web' ? this.webPageIndex : this.graphicPageIndex;
+    const pageCount = tab === 'web' ? this.webPageCount : this.graphicPageCount;
+    const bookEls   = document.querySelectorAll('.pdf-book');
+    const bookEl    = bookEls[tab === 'web' ? 0 : 1];
+    if (isTurning() || index === pageIndex() || !pageCount()) return;
+    isTurning.set(true);
+    bookEl?.classList.add(`is-turning-${direction}`);
+    await new Promise((r) => setTimeout(r, 320));
+    pageIndex.set(index);
+    await this.renderSpread(tab, index);
+    await new Promise((r) => setTimeout(r, 320));
+    bookEl?.classList.remove(`is-turning-${direction}`);
+    isTurning.set(false);
+  }
+
+  private async renderSpread(tab: 'web' | 'graphic', startPage: number) {
+    const pdf   = tab === 'web' ? this.webPdf!    : this.graphicPdf!;
+    const left  = tab === 'web' ? this.leftCanvas  : this.leftCanvasG;
+    const right = tab === 'web' ? this.rightCanvas : this.rightCanvasG;
     await Promise.all([
-      this.renderPage(pdf, startPage, this.leftCanvas?.nativeElement),
-      this.renderPage(pdf, startPage + 1, this.rightCanvas?.nativeElement),
+      this.renderPage(pdf, startPage,     left?.nativeElement),
+      this.renderPage(pdf, startPage + 1, right?.nativeElement),
     ]);
   }
 
-  private async renderPage(
-    pdf: pdfjsLib.PDFDocumentProxy,
-    pageNumber: number,
-    canvas?: HTMLCanvasElement,
-  ) {
+  private async renderPage(pdf: pdfjsLib.PDFDocumentProxy, pageNumber: number, canvas?: HTMLCanvasElement) {
     if (!canvas) return;
     if (pageNumber < 1 || pageNumber > pdf.numPages) {
       canvas.getContext('2d')?.clearRect(0, 0, canvas.width, canvas.height);
       return;
     }
-    const page = await pdf.getPage(pageNumber);
-    const viewport = page.getViewport({
-      scale: Math.min(2.5, 1200 / page.getViewport({ scale: 1 }).width),
-    });
-    canvas.width = viewport.width;
-    canvas.height = viewport.height;
+    const page     = await pdf.getPage(pageNumber);
+    const viewport = page.getViewport({ scale: Math.min(2.5, 1200 / page.getViewport({ scale: 1 }).width) });
+    canvas.width   = viewport.width;
+    canvas.height  = viewport.height;
     await page.render({ canvas, viewport }).promise;
   }
 }

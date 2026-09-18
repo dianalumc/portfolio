@@ -3,7 +3,8 @@
   --gray-pale: #E8E8E6;
   --gray-light: #A5A5A5;
   --gray-dark: #3C3C3A;
-  --violet: #B7A9C9;
+  --violet-light: #B7A9C9;
+  --violet-dark: #412e56;
 
   --font-ui: 'Google Sans', sans-serif;
   --font-display: 'Happy Monkey', cursive;
@@ -16,6 +17,7 @@
   --size-medium: 32px;
   --size-large: 64px;
 
+  --space-xsmall: 8px;
   --space-small: 16px;
   --space-medium: 32px;
   --space-large: 64px;

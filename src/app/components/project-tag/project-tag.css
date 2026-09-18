@@ -3,10 +3,12 @@
 }
 .project-tag {
   display: inline-block;
-  padding: var(--space-small);
+  padding: var(--space-xsmall);
   border-radius: 30px;
-  background: var(--gray-pale);
-  color: var(--gray-dark);
+  border: 1px solid var(--gray-light);
+  color: var(--gray-light);
   font-size: var(--size-small);
   line-height: 1;
+  transition: background-color 180ms ease, color 180ms ease;
 }
+.project-tag:hover { background: var(--violet-light); color: var(--white); }
